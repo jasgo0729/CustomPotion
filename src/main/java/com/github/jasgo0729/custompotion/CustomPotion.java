@@ -27,17 +27,25 @@ public final class CustomPotion extends JavaPlugin {
     }
 
     public void addNauseaPotionRecipe() {
-        NamespacedKey key = new NamespacedKey(this, "custompotion");
-        ItemStack potion = new ItemStack(Material.POTION);
-        PotionMeta meta = (PotionMeta) potion.getItemMeta();
-        meta.setBasePotionType(PotionType.AWKWARD);
-        meta.addCustomEffect(new PotionEffect(PotionEffectType.NAUSEA, 1200, 1), true);
-        meta.addCustomEffect(new PotionEffect(PotionEffectType.SLOWNESS, 1200, 1), true);
-        meta.addCustomEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE, 1200, 1), true);
-        meta.setColor(Color.OLIVE);
-        potion.setItemMeta(meta);
+        NamespacedKey key = new NamespacedKey(this, "nausea_potion");
 
-        PotionMix recipe = new PotionMix(key, potion, new RecipeChoice.ExactChoice(new ItemStack(Material.POTION)), new RecipeChoice.ExactChoice(new ItemStack(Material.POPPY)));
+        ItemStack resultPotion = new ItemStack(Material.POTION);
+        PotionMeta meta = (PotionMeta) resultPotion.getItemMeta();
+
+        if (meta != null) {
+            meta.setBasePotionType(PotionType.AWKWARD);
+            meta.addCustomEffect(new PotionEffect(PotionEffectType.NAUSEA, 1200, 1), true);
+            meta.addCustomEffect(new PotionEffect(PotionEffectType.SLOWNESS, 1200, 1), true);
+            meta.addCustomEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE, 1200, 1), true);
+            meta.setColor(Color.OLIVE);
+            meta.displayName(net.kyori.adventure.text.Component.text("기분이 좋아지는 무언가"));
+            resultPotion.setItemMeta(meta);
+        }
+
+        RecipeChoice inputChoice = new RecipeChoice.MaterialChoice(Material.POTION);
+        RecipeChoice ingredientChoice = new RecipeChoice.MaterialChoice(Material.POPPY);
+
+        PotionMix recipe = new PotionMix(key, resultPotion, inputChoice, ingredientChoice);
         Bukkit.getPotionBrewer().addPotionMix(recipe);
     }
 }
